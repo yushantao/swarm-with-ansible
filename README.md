@@ -29,23 +29,23 @@ eg:
 
 cat docker-compose.yml
 
-version: '3.2'
+    version: '3.2'
 
-services:
+      services:
 
-  service_name:
+        service_name:
   
-    image: registry_url/image_name:0.0.1
+          image: registry_url/image_name:0.0.1
     
+          networks:
+      
+            - bridge
+ 
     networks:
-    
-      - bridge
 
-networks:
-
-  bridge:
+      bridge:
   
-    external: true
+        external: true
     
 docker-compose -f docker-compose.yml config > docker-stack.yml
 
