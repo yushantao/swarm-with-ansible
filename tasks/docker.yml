@@ -1,0 +1,39 @@
+---
+#bridge network 
+- name: modify br0  file
+  template: src=templates/docker/ifcfg-br0 dest=/etc/sysconfig/network-scripts/ mode=0755
+  register: network
+
+- name: modify bond1 file
+  copy: src=templates/docker/ifcfg-bond1 dest=/etc/sysconfig/network-scripts/ mode=0755
+
+- name: restart network
+  command: service network restart
+  when: network.changed
+
+- name: turn off swap
+  command: swapoff -a
+
+# install docker 
+- name: copy docker repo
+  copy: src=files/docker/Docker-ce.repo dest=/etc/yum.repos.d/ mode=0644
+
+- name: install epel repo
+  yum: name=epel-release state=present
+
+- name: install docker-ce 
+  yum: name=docker-ce-17.09.0.ce  state=present
+
+- name: mkdir directory
+  file: name=/etc/docker state=directory
+
+- name: set docker config
+  template: src=templates/docker/daemon.json dest=/etc/docker/daemon.json mode=0755
+
+- name: set docker mirror
+  copy: src={{item.src }} dest={{ item.dest }} mode=0755
+  with_items:
+    - { src: 'files/docker/docker-compose-Linux-x86_64', dest: '/usr/bin/docker-compose' }
+
+- name: restart docker service 
+  service: name=docker state=started enabled=yes

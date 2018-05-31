@@ -1,0 +1,12 @@
+[all:vars]
+timezone=Asia/Shanghai
+
+[swarm:children]
+leader
+
+[leader]
+sugar.mobike.io             ansible_ssh_host=10.201.88.2
+
+[follower]
+
+[worker]

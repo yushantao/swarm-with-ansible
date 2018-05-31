@@ -1,0 +1,7 @@
+#IP Config for bond1:
+DEVICE=bond1
+ONBOOT=yes
+BONDING_OPTS="mode=4 miimon=100 ad_select=1 updelay=200 xmit_hash_policy=2"
+TYPE=Unknown
+NM_CONTROLLED=no
+BRIDGE=br0

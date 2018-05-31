@@ -1,0 +1,36 @@
+- name: init swarm leader
+  shell: docker swarm init  --advertise-addr {{ ansible_ssh_host }}
+  when: "'leader' in group_names"
+
+- name: register manager token
+  shell: docker swarm join-token manager | grep token | awk '{print $5}'
+  register: swarm_manager_token
+  when: "'leader' in group_names"
+
+- name: register worker token
+  shell: docker swarm join-token worker | grep token | awk '{print $5}'
+  register: swarm_worker_token
+  when: "'leader' in group_names"
+
+- name: generate join swarm manager script
+  template: src=templates/docker/join-as-manager.sh.j2 dest=files/docker/bin/join-as-manager.sh mode=755
+  delegate_to: localhost
+  become: false
+  when: "'leader' in group_names"
+
+- name: generate join swarm worker script
+  template: src=templates/docker/join-as-worker.sh.j2 dest=files/docker/bin/join-as-worker.sh mode=755
+  delegate_to: localhost
+  become: false
+  when: "'leader' in group_names"
+
+- name: upload bin
+  copy: mode=0755 src=files/docker/bin dest=/usr/local/
+
+- name: init swarm follower
+  shell: /usr/local/bin/join-as-manager.sh
+  when: "'follower' in group_names"
+
+- name: init swarm worker
+  shell: /usr/local/bin/join-as-worker.sh
+  when: "'worker' in group_names"

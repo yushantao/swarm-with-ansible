@@ -1,0 +1,7 @@
+#IP Config for br0:
+DEVICE=br0
+ONBOOT=yes
+BOOTPROTO=static
+IPADDR={{ ansible_ssh_host }}
+NETMASK='255.255.255.0'
+GATEWAY={{ ansible_ssh_host.split('.')[0] }}.{{ ansible_ssh_host.split('.')[1] }}.{{ ansible_ssh_host.split('.')[2] }}.1

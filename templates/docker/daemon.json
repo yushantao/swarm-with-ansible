@@ -1,0 +1,6 @@
+{
+  "registry-mirrors": ["http://mirror.xxx.com"],
+  "data-root":"/opt/docker",
+  "bridge": "br0",
+  "fixed-cidr": "{{ ansible_ssh_host.split('.')[0] }}.{{ ansible_ssh_host.split('.')[1] }}.{{ ansible_ssh_host.split('.')[2] }}.128/25"
+}
