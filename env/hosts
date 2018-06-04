@@ -5,7 +5,7 @@ timezone=Asia/Shanghai
 leader
 
 [leader]
-sugar.mobike.io             ansible_ssh_host=10.201.88.2
+sugar.xxx.io             ansible_ssh_host=10.201.88.2
 
 [follower]
 
